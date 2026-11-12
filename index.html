@@ -5,205 +5,416 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>FeiraLocal 🌱 — Marketplace Agrícola Acessível</title>
   
-  <!-- Tailwind CSS para Estilização Moderna e Responsiva -->
-  <script src="[suspicious link removed]"></script>
-  
-  <script>
-    // Configuração do Design System oficial (Cores e Tokens WCAG)
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            verde: {
-              primario: '#2E7D32',
-              escuro: '#1B5E20',
-              claro: '#E8F5E9'
-            },
-            laranja: {
-              acao: '#E65100',
-              fundo: '#FFF3E0'
-            },
-            superficie: '#F9FBE7',
-            texto: {
-              principal: '#212121',
-              secundario: '#555555'
-            }
-          }
-        }
-      }
-    }
-  </script>
-
   <style>
-    /* WCAG: Indicador de foco evidente para navegação por teclado (Tecla Tab) */
-    button:focus-visible, input:focus-visible, select:focus-visible {
-      outline: 3px solid #E65100;
+    /* DESIGN SYSTEM FEIRALOCAL & WCAG 2.1 */
+    :root {
+      --verde-primario: #2E7D32;
+      --verde-escuro: #1B5E20;
+      --verde-claro: #E8F5E9;
+      --laranja-acao: #E65100;
+      --laranja-fundo: #FFF3E0;
+      --superficie: #F9FBE7;
+      --texto-principal: #212121;
+      --texto-secundario: #555555;
+      --borda: #E0E0E0;
+      --branco: #FFFFFF;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    }
+
+    body {
+      background-color: #F0F2F5;
+      color: var(--texto-principal);
+      display: flex;
+      justify-content: center;
+      min-height: 100vh;
+    }
+
+    /* Container Mobile-First Centralizado */
+    .app-container {
+      width: 100%;
+      max-width: 440px;
+      background-color: var(--superficie);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+    }
+
+    /* Header */
+    header {
+      background-color: var(--verde-primario);
+      color: var(--branco);
+      padding: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    header h1 {
+      font-size: 20px;
+      font-weight: 700;
+    }
+
+    header p {
+      font-size: 12px;
+      color: var(--verde-claro);
+      margin-top: 2px;
+    }
+
+    .header-botoes {
+      display: flex;
+      gap: 6px;
+    }
+
+    .btn-header {
+      font-size: 12px;
+      font-weight: 600;
+      padding: 6px 10px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      min-height: 38px;
+    }
+
+    .btn-feirante-nav {
+      background: var(--branco);
+      color: var(--verde-primario);
+    }
+
+    .btn-sair {
+      background: #D32F2F;
+      color: var(--branco);
+    }
+
+    /* Conteúdo Principal */
+    main {
+      flex: 1;
+      padding: 16px;
+      overflow-y: auto;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    /* Cards e Elementos Visuais */
+    .card {
+      background-color: var(--branco);
+      border-radius: 14px;
+      border: 1px solid var(--borda);
+      padding: 16px;
+      margin-bottom: 12px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+
+    .input-grupo {
+      margin-bottom: 12px;
+    }
+
+    .input-grupo label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .input-campo {
+      width: 100%;
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid var(--borda);
+      font-size: 15px;
+      min-height: 48px;
+    }
+
+    .input-campo:focus {
+      outline: 2px solid var(--verde-primario);
+    }
+
+    /* Botões Padrão WCAG (>= 48px de área de toque) */
+    .btn-primario {
+      width: 100%;
+      background-color: var(--verde-primario);
+      color: var(--branco);
+      border: none;
+      border-radius: 10px;
+      padding: 14px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      min-height: 48px;
+      transition: background 0.2s;
+    }
+
+    .btn-primario:hover {
+      background-color: var(--verde-escuro);
+    }
+
+    .btn-cta {
+      width: 100%;
+      background-color: var(--laranja-acao);
+      color: var(--branco);
+      border: none;
+      border-radius: 12px;
+      padding: 14px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      min-height: 52px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 3px 6px rgba(230, 81, 0, 0.3);
+    }
+
+    /* Barra de Categorias Horizontal */
+    .scroll-categorias {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 8px;
+      margin-bottom: 12px;
+    }
+
+    .chip-categoria {
+      padding: 8px 14px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 700;
+      border: 1px solid var(--borda);
+      background: var(--branco);
+      color: var(--texto-secundario);
+      cursor: pointer;
+      white-space: nowrap;
+      min-height: 42px;
+    }
+
+    .chip-categoria.ativo {
+      background: var(--verde-primario);
+      color: var(--branco);
+      border-color: var(--verde-primario);
+    }
+
+    /* Itens de Produto */
+    .item-produto {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--branco);
+      border: 1px solid var(--borda);
+      border-radius: 12px;
+      padding: 14px;
+      margin-bottom: 10px;
+    }
+
+    .btn-adicionar {
+      background: var(--verde-primario);
+      color: var(--branco);
+      border: none;
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      min-height: 44px;
+    }
+
+    /* Controles de Quantidade */
+    .qtd-controle {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-qtd {
+      width: 38px;
+      height: 38px;
+      border-radius: 8px;
+      border: 1px solid var(--borda);
+      background: #F5F5F5;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .btn-qtd.mais {
+      background: var(--verde-claro);
+      color: var(--verde-primario);
+      border-color: var(--verde-primario);
+    }
+
+    /* Foco Visível para Teclado (Tab) */
+    button:focus-visible, input:focus-visible {
+      outline: 3px solid var(--laranja-acao);
       outline-offset: 2px;
     }
   </style>
 </head>
-<body class="bg-gray-100 text-texto-principal antialiased flex justify-center min-h-screen">
+<body>
 
-  <!-- Container Mobile-First (Simula o App no navegador ou preenche a tela do celular) -->
-  <div class="w-full max-w-md bg-superficie shadow-2xl flex flex-col min-h-screen relative">
+  <div class="app-container">
 
-    <!-- ========================================== -->
-    <!-- 1. HEADER MODULAR & ACESSÍVEL             -->
-    <!-- ========================================== -->
-    <header class="bg-verde-primario text-white p-4 shadow-md flex justify-between items-center" role="banner">
+    <!-- HEADER -->
+    <header role="banner">
       <div>
-        <h1 class="text-xl font-bold flex items-center gap-1">FeiraLocal 🌱</h1>
-        <p id="labelUsuario" class="text-xs text-verde-claro font-medium">Conectando você à agricultura familiar</p>
+        <h1>FeiraLocal 🌱</h1>
+        <p id="labelUsuario">Conectando você à agricultura familiar</p>
       </div>
-      <div id="acoesHeader" class="hidden flex items-center gap-2">
-        <button id="btnTrocaPerfil" onclick="alternarVisaoFeirante()" class="text-xs bg-white text-verde-primario px-2.5 py-1.5 rounded-lg font-bold hover:bg-gray-100 transition min-h-[44px]" aria-label="Acessar painel do feirante">
+      <div id="acoesHeader" class="header-botoes hidden">
+        <button id="btnTrocaPerfil" onclick="alternarVisaoFeirante()" class="btn-header btn-feirante-nav" aria-label="Painel do Feirante">
           Feirante
         </button>
-        <button onclick="realizarLogout()" class="text-xs bg-red-600 text-white px-2.5 py-1.5 rounded-lg font-bold hover:bg-red-700 transition min-h-[44px]" aria-label="Sair da conta atual">
+        <button onclick="realizarLogout()" class="btn-header btn-sair" aria-label="Sair da conta">
           Sair
         </button>
       </div>
     </header>
 
-    <!-- ========================================== -->
-    <!-- 2. ÁREA PRINCIPAL (TELAS NAVEGÁVEIS)       -->
-    <!-- ========================================== -->
-    <main class="flex-1 p-4 overflow-y-auto" id="conteudoPrincipal" role="main">
+    <!-- ÁREA PRINCIPAL NAVEGÁVEL -->
+    <main role="main">
 
-      <!-- TELA 1: LOGIN & CADASTRO -->
-      <section id="telaLogin" class="flex flex-col justify-center h-full py-6">
-        <div class="text-center mb-6">
-          <h2 class="text-2xl font-bold text-verde-primario">Bem-vindo(a) à Feira!</h2>
-          <p class="text-sm text-texto-secundario mt-1">Alimentos frescos direto do produtor rural</p>
+      <!-- TELA 1: LOGIN -->
+      <section id="telaLogin" style="padding-top: 20px;">
+        <div style="text-align: center; margin-bottom: 20px;">
+          <h2 style="font-size: 22px; color: var(--verde-primario);">Bem-vindo(a) à Feira!</h2>
+          <p style="font-size: 13px; color: var(--texto-secundario); margin-top: 4px;">Alimentos frescos direto do produtor rural</p>
         </div>
 
-        <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
-          <label for="inputEmail" class="block text-sm font-semibold mb-1 text-texto-principal">E-mail</label>
-          <input type="email" id="inputEmail" value="maria@email.com" class="w-full p-3 border rounded-xl mb-4 text-base focus:ring-2 focus:ring-verde-primario min-h-[48px]" placeholder="seu@email.com" aria-required="true">
-
-          <label for="inputSenha" class="block text-sm font-semibold mb-1 text-texto-principal">Senha</label>
-          <div class="relative mb-6">
-            <input type="password" id="inputSenha" value="123456" class="w-full p-3 border rounded-xl text-base focus:ring-2 focus:ring-verde-primario min-h-[48px]" placeholder="Digite sua senha" aria-required="true">
-            <button type="button" onclick="alternarVisibilidadeSenha()" class="absolute right-3 top-3 text-xs font-bold text-verde-primario min-h-[44px] px-1" aria-label="Alternar exibição da senha">
-              <span id="textoVisibilidadeSenha">Ver</span>
-            </button>
+        <div class="card">
+          <div class="input-grupo">
+            <label for="inputEmail">E-mail</label>
+            <input type="email" id="inputEmail" class="input-campo" value="maria@email.com">
           </div>
 
-          <button onclick="entrarComo('Dona Maria (Compradora)', 'comprador')" class="w-full bg-verde-primario text-white py-3.5 rounded-xl font-bold text-base hover:bg-verde-escuro transition min-h-[48px] shadow-sm mb-3" aria-label="Entrar na conta">
+          <div class="input-grupo">
+            <label for="inputSenha">Senha</label>
+            <div style="display: flex; gap: 6px;">
+              <input type="password" id="inputSenha" class="input-campo" value="123456" style="flex: 1;">
+              <button type="button" onclick="alternarVisibilidadeSenha()" class="btn-header" style="background:#ECEFF1; min-height:48px;" aria-label="Mostrar ou ocultar senha">
+                <span id="textoVisibilidadeSenha">Ver</span>
+              </button>
+            </div>
+          </div>
+
+          <button onclick="entrarComo('Dona Maria (Compradora)', 'comprador')" class="btn-primario" style="margin-top: 8px;">
             Entrar no FeiraLocal
           </button>
 
-          <div class="relative flex py-3 items-center">
-            <div class="flex-grow border-t border-gray-200"></div>
-            <span class="flex-shrink mx-3 text-xs text-gray-400 font-semibold uppercase">Atalhos de Demonstração UX</span>
-            <div class="flex-grow border-t border-gray-200"></div>
+          <div style="text-align: center; margin: 16px 0; font-size: 11px; color: #888; font-weight: bold; text-transform: uppercase;">
+            Atalhos para Demonstração UX
           </div>
 
-          <div class="space-y-2 mt-1">
-            <button onclick="entrarComo('Dona Maria (Compradora)', 'comprador')" class="w-full border-2 border-verde-primario text-verde-primario py-2.5 rounded-xl text-xs font-bold hover:bg-verde-claro transition min-h-[48px]">
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <button onclick="entrarComo('Dona Maria (Compradora)', 'comprador')" class="btn-primario" style="background: var(--verde-claro); color: var(--verde-primario); border: 1.5px solid var(--verde-primario);">
               Persona 1: Dona Maria (Compradora)
             </button>
-            <button onclick="entrarComo('Seu José (Feirante)', 'vendedor')" class="w-full border-2 border-laranja-acao text-laranja-acao py-2.5 rounded-xl text-xs font-bold hover:bg-laranja-fundo transition min-h-[48px]">
+            <button onclick="entrarComo('Seu José (Feirante)', 'vendedor')" class="btn-primario" style="background: var(--laranja-fundo); color: var(--laranja-acao); border: 1.5px solid var(--laranja-acao);">
               Persona 2: Seu José (Feirante)
             </button>
           </div>
         </div>
       </section>
 
-      <!-- TELA 2: CATÁLOGO DO COMPRADOR -->
-      <section id="telaCatalogo" class="hidden pb-20">
-        <!-- Barra de Filtros de Categorias -->
-        <nav class="flex gap-2 overflow-x-auto pb-3 mb-4 scrollbar-none" aria-label="Categorias de produtos">
-          <button onclick="filtrarCategoria('TODOS')" class="filtro-btn px-4 py-2 rounded-full text-xs font-bold bg-verde-primario text-white min-h-[44px]" aria-pressed="true">Todos</button>
-          <button onclick="filtrarCategoria('VERDURAS')" class="filtro-btn px-4 py-2 rounded-full text-xs font-bold bg-white text-gray-700 border min-h-[44px]" aria-pressed="false">Verduras</button>
-          <button onclick="filtrarCategoria('LEGUMES')" class="filtro-btn px-4 py-2 rounded-full text-xs font-bold bg-white text-gray-700 border min-h-[44px]" aria-pressed="false">Legumes</button>
-          <button onclick="filtrarCategoria('FRUTAS')" class="filtro-btn px-4 py-2 rounded-full text-xs font-bold bg-white text-gray-700 border min-h-[44px]" aria-pressed="false">Frutas</button>
-          <button onclick="filtrarCategoria('TUBERCULOS')" class="filtro-btn px-4 py-2 rounded-full text-xs font-bold bg-white text-gray-700 border min-h-[44px]" aria-pressed="false">Tubérculos</button>
+      <!-- TELA 2: CATÁLOGO -->
+      <section id="telaCatalogo" class="hidden">
+        <nav class="scroll-categorias" aria-label="Categorias de produtos">
+          <button onclick="filtrarCategoria('TODOS')" class="chip-categoria ativo">Todos</button>
+          <button onclick="filtrarCategoria('VERDURAS')" class="chip-categoria">Verduras</button>
+          <button onclick="filtrarCategoria('LEGUMES')" class="chip-categoria">Legumes</button>
+          <button onclick="filtrarCategoria('FRUTAS')" class="chip-categoria">Frutas</button>
+          <button onclick="filtrarCategoria('TUBERCULOS')" class="chip-categoria">Tubérculos</button>
         </nav>
 
-        <!-- Lista de Cards de Produtos (Modular) -->
-        <div id="listaProdutosContainer" class="space-y-3" role="region" aria-live="polite">
-          <!-- Renderizado via JavaScript -->
+        <div id="listaProdutosContainer">
+          <!-- Gerado via JS -->
         </div>
       </section>
 
-      <!-- TELA 3: CARRINHO & CHECKOUT -->
-      <section id="telaCarrinho" class="hidden pb-20">
-        <div class="flex items-center justify-between mb-4">
-          <h2 class="text-lg font-bold text-texto-principal">Meu Carrinho da Feira</h2>
-          <button onclick="navegarPara('telaCatalogo')" class="text-xs text-verde-primario font-bold min-h-[44px] px-2" aria-label="Voltar para a lista de produtos">
-            ← Continuar Comprando
+      <!-- TELA 3: CARRINHO -->
+      <section id="telaCarrinho" class="hidden">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+          <h2 style="font-size: 17px; font-weight: bold;">Meu Carrinho da Feira</h2>
+          <button onclick="navegarPara('telaCatalogo')" class="btn-header" style="background: none; color: var(--verde-primario); font-weight: bold;">
+            ← Voltar
           </button>
         </div>
 
-        <div id="itensCarrinhoContainer" class="space-y-3 mb-6" role="region" aria-live="polite">
-          <!-- Renderizado via JavaScript -->
-        </div>
+        <div id="itensCarrinhoContainer"></div>
 
-        <!-- Opção de Entrega / Retirada -->
-        <fieldset class="bg-white p-4 rounded-xl border border-gray-200 mb-6">
-          <legend class="text-sm font-bold text-texto-principal mb-2">Forma de Recebimento</legend>
-          <label class="flex items-center gap-3 p-2 rounded-lg cursor-pointer hover:bg-gray-50 min-h-[48px]">
-            <input type="radio" name="tipoEntrega" value="retirada" checked onchange="atualizarTotais()" class="w-5 h-5 text-verde-primario">
-            <span class="text-sm font-medium">Retirar direto na banca (Grátis)</span>
+        <fieldset class="card" style="margin-top: 12px;">
+          <legend style="font-size: 13px; font-weight: bold; margin-bottom: 6px;">Recebimento</legend>
+          <label style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px; cursor: pointer; min-height: 40px;">
+            <input type="radio" name="tipoEntrega" value="retirada" checked onchange="atualizarTotais()">
+            <span style="font-size: 14px;">Retirar na banca do feirante (Grátis)</span>
           </label>
-          <label class="flex items-center gap-3 p-2 rounded-lg cursor-pointer hover:bg-gray-50 min-h-[48px]">
-            <input type="radio" name="tipoEntrega" value="entrega" onchange="atualizarTotais()" class="w-5 h-5 text-verde-primario">
-            <span class="text-sm font-medium">Entrega ecológica em casa (+ R$ 5,00)</span>
+          <label style="display: flex; align-items: center; gap: 10px; cursor: pointer; min-height: 40px;">
+            <input type="radio" name="tipoEntrega" value="entrega" onchange="atualizarTotais()">
+            <span style="font-size: 14px;">Entrega ecológica (+ R$ 5,00)</span>
           </label>
         </fieldset>
 
-        <!-- Resumo Financeiro Acessível -->
-        <div class="bg-white p-4 rounded-xl border border-gray-200 space-y-2 mb-6">
-          <div class="flex justify-between text-sm">
-            <span class="text-texto-secundario">Subtotal produtos:</span>
-            <span id="valorSubtotal" class="font-bold">R$ 0,00</span>
+        <div class="card">
+          <div style="display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 4px;">
+            <span>Subtotal:</span>
+            <span id="valorSubtotal" style="font-weight: bold;">R$ 0,00</span>
           </div>
-          <div class="flex justify-between text-sm">
-            <span class="text-texto-secundario">Frete / Taxa:</span>
-            <span id="valorFrete" class="font-bold">Grátis</span>
+          <div style="display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 8px;">
+            <span>Taxa de Entrega:</span>
+            <span id="valorFrete" style="font-weight: bold;">Grátis</span>
           </div>
-          <div class="border-t pt-2 flex justify-between text-base font-bold text-verde-primario">
-            <span>Total a Pagar:</span>
-            <span id="valorTotalFinal" class="text-lg">R$ 0,00</span>
+          <div style="border-top: 1px solid var(--borda); padding-top: 8px; display: flex; justify-content: space-between; font-size: 16px; font-weight: bold; color: var(--verde-primario);">
+            <span>Total Final:</span>
+            <span id="valorTotalFinal">R$ 0,00</span>
           </div>
         </div>
 
-        <button onclick="finalizarCompra()" class="w-full bg-laranja-acao text-white py-3.5 rounded-xl font-bold text-base hover:opacity-95 transition min-h-[52px] shadow-md" aria-label="Finalizar e confirmar pedido da feira">
+        <button onclick="finalizarCompra()" class="btn-cta" style="margin-top: 8px; justify-content: center;">
           Confirmar e Finalizar Pedido
         </button>
       </section>
 
-      <!-- TELA 4: PAINEL DE GESTÃO DO FEIRANTE -->
-      <section id="telaFeirante" class="hidden pb-20">
-        <div class="flex items-center justify-between mb-4">
-          <h2 class="text-lg font-bold text-texto-principal">Gestão de Colheitas</h2>
-          <button onclick="navegarPara('telaCatalogo')" class="text-xs text-verde-primario font-bold min-h-[44px] px-2">
-            Ver Catálogo →
+      <!-- TELA 4: PAINEL DO FEIRANTE -->
+      <section id="telaFeirante" class="hidden">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+          <h2 style="font-size: 17px; font-weight: bold;">Gestão de Colheitas</h2>
+          <button onclick="navegarPara('telaCatalogo')" class="btn-header" style="background: none; color: var(--verde-primario); font-weight: bold;">
+            Catálogo →
           </button>
         </div>
 
-        <!-- Formulário Rápido de Cadastro de Produto -->
-        <div class="bg-white p-4 rounded-xl border border-gray-200 mb-6 shadow-sm">
-          <h3 class="text-sm font-bold text-verde-primario mb-3">Cadastrar Nova Colheita</h3>
+        <div class="card">
+          <h3 style="font-size: 14px; font-weight: bold; color: var(--verde-primario); margin-bottom: 8px;">Cadastrar Produto</h3>
           
-          <label for="cadNome" class="block text-xs font-semibold mb-1">Nome do Alimento</label>
-          <input type="text" id="cadNome" placeholder="Ex: Cenoura Orgânica" class="w-full p-2.5 border rounded-lg mb-3 text-sm min-h-[48px]">
+          <div class="input-grupo">
+            <label for="cadNome">Nome da Colheita</label>
+            <input type="text" id="cadNome" class="input-campo" placeholder="Ex: Melancia Orgânica">
+          </div>
 
-          <div class="grid grid-cols-2 gap-2 mb-3">
-            <div>
-              <label for="cadPreco" class="block text-xs font-semibold mb-1">Preço R$</label>
-              <input type="number" id="cadPreco" step="0.50" placeholder="4.50" class="w-full p-2.5 border rounded-lg text-sm min-h-[48px]">
+          <div style="display: flex; gap: 8px;">
+            <div class="input-grupo" style="flex: 1;">
+              <label for="cadPreco">Preço R$</label>
+              <input type="number" id="cadPreco" class="input-campo" placeholder="5.00" step="0.50">
             </div>
-            <div>
-              <label for="cadUnidade" class="block text-xs font-semibold mb-1">Unidade</label>
-              <input type="text" id="cadUnidade" placeholder="kg, maço" class="w-full p-2.5 border rounded-lg text-sm min-h-[48px]">
+            <div class="input-grupo" style="flex: 1;">
+              <label for="cadUnidade">Unidade</label>
+              <input type="text" id="cadUnidade" class="input-campo" placeholder="kg, maço">
             </div>
           </div>
 
-          <div class="mb-4">
-            <label for="cadCategoria" class="block text-xs font-semibold mb-1">Categoria</label>
-            <select id="cadCategoria" class="w-full p-2.5 border rounded-lg text-sm min-h-[48px] bg-white">
+          <div class="input-grupo">
+            <label for="cadCategoria">Categoria</label>
+            <select id="cadCategoria" class="input-campo" style="background: white;">
               <option value="VERDURAS">Verduras</option>
               <option value="LEGUMES">Legumes</option>
               <option value="FRUTAS">Frutas</option>
@@ -211,25 +422,20 @@
             </select>
           </div>
 
-          <button onclick="cadastrarNovoProduto()" class="w-full bg-verde-primario text-white py-3 rounded-lg font-bold text-sm hover:bg-verde-escuro transition min-h-[48px]">
-            + Adicionar ao Catálogo da Feira
+          <button onclick="cadastrarNovoProduto()" class="btn-primario" style="margin-top: 4px;">
+            + Inserir Produto na Feira
           </button>
         </div>
 
-        <!-- Lista de Produtos para Exclusão/Controle -->
-        <h3 class="text-sm font-bold text-texto-principal mb-2">Produtos Ativos no Sistema</h3>
-        <div id="listaProdutosFeirante" class="space-y-2" role="region" aria-live="polite">
-          <!-- Renderizado via JavaScript -->
-        </div>
+        <h3 style="font-size: 14px; font-weight: bold; margin-bottom: 8px;">Produtos no Catálogo</h3>
+        <div id="listaProdutosFeirante"></div>
       </section>
 
     </main>
 
-    <!-- ========================================== -->
-    <!-- 3. FOOTER FIXO (BOTÃO DE AÇÃO / CARRINHO)  -->
-    <!-- ========================================== -->
-    <footer id="barraInferiorCarrinho" class="hidden p-3 bg-white border-t border-gray-200 shadow-lg sticky bottom-0">
-      <button onclick="navegarPara('telaCarrinho')" class="w-full bg-laranja-acao text-white py-3 px-4 rounded-xl font-bold flex justify-between items-center shadow-md min-h-[52px]" aria-label="Abrir carrinho de compras">
+    <!-- FOOTER CARRINHO -->
+    <footer id="barraInferiorCarrinho" class="hidden" style="padding: 12px; background: white; border-top: 1px solid var(--borda);">
+      <button onclick="navegarPara('telaCarrinho')" class="btn-cta">
         <span id="labelContagemCarrinho">Ver Carrinho (0 itens)</span>
         <span id="labelTotalCarrinho">R$ 0,00</span>
       </button>
@@ -237,86 +443,57 @@
 
   </div>
 
-  <!-- ============================================================ -->
-  <!-- 4. ARQUITETURA DE MICROSSERVIÇOS & LÓGICA MODULAR FRONT-END   -->
-  <!-- ============================================================ -->
   <script>
-    // --- MICROSSERVIÇO 1: Catálogo de Produtos (Independente) ---
+    // MICROSSERVIÇOS MODULARES
     const MicroservicoCatalogo = {
       produtos: [
         { id: 1, nome: "Alface Americana Fresca", preco: 3.50, unidade: "maço", categoria: "VERDURAS", feirante: "Seu José da Horta" },
         { id: 2, nome: "Tomate Cereja Orgânico", preco: 6.90, unidade: "kg", categoria: "LEGUMES", feirante: "Dona Neide" },
         { id: 3, nome: "Cenoura Selecionada", preco: 4.20, unidade: "kg", categoria: "LEGUMES", feirante: "Seu José da Horta" },
-        { id: 4, nome: "Banana Prata Climatizada", preco: 5.50, unidade: "palma", categoria: "FRUTAS", feirante: "Feira Boa Vista" },
+        { id: 4, nome: "Banana Prata", preco: 5.50, unidade: "palma", categoria: "FRUTAS", feirante: "Feira Boa Vista" },
         { id: 5, nome: "Macaxeira Descascada", preco: 4.80, unidade: "kg", categoria: "TUBERCULOS", feirante: "Sítio Primavera" }
       ],
-      obterProdutos() {
-        return this.produtos;
-      },
-      adicionarProduto(produto) {
-        this.produtos.push(produto);
-      },
-      removerProduto(id) {
-        this.produtos = this.produtos.filter(p => p.id !== id);
-      }
+      obterProdutos() { return this.produtos; },
+      adicionarProduto(p) { this.produtos.push(p); },
+      removerProduto(id) { this.produtos = this.produtos.filter(p => p.id !== id); }
     };
 
-    // --- MICROSSERVIÇO 2: Gestão do Carrinho e Checkout (Isolado) ---
     const MicroservicoCarrinho = {
       itens: [],
       adicionar(produto) {
-        const itemExistente = this.itens.find(i => i.produto.id === produto.id);
-        if (itemExistente) {
-          itemExistente.quantidade++;
-        } else {
-          this.itens.push({ produto, quantidade: 1 });
+        const item = this.itens.find(i => i.produto.id === produto.id);
+        if (item) item.quantidade++;
+        else this.itens.push({ produto, quantidade: 1 });
+      },
+      decrementar(id) {
+        const item = this.itens.find(i => i.produto.id === id);
+        if (item) {
+          item.quantidade--;
+          if (item.quantidade <= 0) this.itens = this.itens.filter(i => i.produto.id !== id);
         }
       },
-      decrementar(produtoId) {
-        const itemExistente = this.itens.find(i => i.produto.id === produtoId);
-        if (itemExistente) {
-          itemExistente.quantidade--;
-          if (itemExistente.quantidade <= 0) {
-            this.itens = this.itens.filter(i => i.produto.id !== produtoId);
-          }
-        }
-      },
-      limpar() {
-        this.itens = [];
-      },
-      calcularSubtotal() {
-        return this.itens.reduce((acc, i) => acc + (i.produto.preco * i.quantidade), 0);
-      },
-      obterQuantidadeTotal() {
-        return this.itens.reduce((acc, i) => acc + i.quantidade, 0);
-      }
+      calcularSubtotal() { return this.itens.reduce((acc, i) => acc + (i.produto.preco * i.quantidade), 0); },
+      obterQuantidadeTotal() { return this.itens.reduce((acc, i) => acc + i.quantidade, 0); },
+      limpar() { this.itens = []; }
     };
 
-    // --- ESTADO GLOBAL DA APLICAÇÃO ---
     let usuarioAtual = null;
     let categoriaAtiva = "TODOS";
 
-    // Navegação entre Telas
     function navegarPara(idTela) {
-      const telas = ['telaLogin', 'telaCatalogo', 'telaCarrinho', 'telaFeirante'];
-      telas.forEach(t => {
+      ['telaLogin', 'telaCatalogo', 'telaCarrinho', 'telaFeirante'].forEach(t => {
         document.getElementById(t).classList.add('hidden');
       });
-
       document.getElementById(idTela).classList.remove('hidden');
 
-      // Exibição do footer do carrinho apenas no catálogo
-      const footerCarrinho = document.getElementById('barraInferiorCarrinho');
+      const footer = document.getElementById('barraInferiorCarrinho');
       if (idTela === 'telaCatalogo' && usuarioAtual?.tipo === 'comprador') {
-        footerCarrinho.classList.remove('hidden');
+        footer.classList.remove('hidden');
       } else {
-        footerCarrinho.classList.add('hidden');
+        footer.classList.add('hidden');
       }
-
-      window.scrollTo(0, 0);
     }
 
-    // Autenticação e Seleção de Personas
     function entrarComo(nome, tipo) {
       usuarioAtual = { nome, tipo };
       document.getElementById('labelUsuario').innerText = `Olá, ${nome}`;
@@ -362,149 +539,121 @@
       }
     }
 
-    // Renderização do Catálogo (Modular)
     function renderizarCatalogo() {
       const container = document.getElementById('listaProdutosContainer');
       container.innerHTML = '';
-
       const produtos = MicroservicoCatalogo.obterProdutos();
-      const filtrados = (categoriaAtiva === 'TODOS') 
-        ? produtos 
-        : produtos.filter(p => p.categoria === categoriaAtiva);
+      const filtrados = (categoriaAtiva === 'TODOS') ? produtos : produtos.filter(p => p.categoria === categoriaAtiva);
 
       filtrados.forEach(p => {
-        const card = document.createElement('article');
-        card.className = "bg-white p-4 rounded-xl border border-gray-200 shadow-sm flex justify-between items-center";
-        card.innerHTML = `
+        const item = document.createElement('div');
+        item.className = "item-produto";
+        item.innerHTML = `
           <div>
-            <h3 class="font-bold text-base text-texto-principal">${p.nome}</h3>
-            <p class="text-xs text-texto-secundario">Produtor: ${p.feirante}</p>
-            <p class="text-base font-bold text-verde-primario mt-1">R$ ${p.preco.toFixed(2)} <span class="text-xs font-normal text-gray-500">/ ${p.unidade}</span></p>
+            <h3 style="font-size:15px; font-weight:bold;">${p.nome}</h3>
+            <p style="font-size:12px; color:var(--texto-secundario);">Produtor: ${p.feirante}</p>
+            <p style="font-size:15px; font-weight:bold; color:var(--verde-primario); margin-top:2px;">
+              R$ ${p.preco.toFixed(2)} <span style="font-size:11px; font-weight:normal; color:#777;">/ ${p.unidade}</span>
+            </p>
           </div>
-          <button onclick="adicionarProdutoAoCarrinho(${p.id})" class="bg-verde-primario text-white px-4 py-2.5 rounded-xl font-bold text-xs hover:bg-verde-escuro transition min-h-[48px]" aria-label="Adicionar ${p.nome} ao carrinho">
-            + Adicionar
-          </button>
+          <button onclick="adicionarProduto(${p.id})" class="btn-adicionar">+ Adicionar</button>
         `;
-        container.appendChild(card);
+        container.appendChild(item);
       });
     }
 
-    function filtrarCategoria(categoria) {
-      categoriaAtiva = categoria;
-      document.querySelectorAll('.filtro-btn').forEach(btn => {
-        if (btn.innerText.toUpperCase() === categoria) {
-          btn.className = 'filtro-btn px-4 py-2 rounded-full text-xs font-bold bg-verde-primario text-white min-h-[44px]';
-          btn.setAttribute('aria-pressed', 'true');
-        } else {
-          btn.className = 'filtro-btn px-4 py-2 rounded-full text-xs font-bold bg-white text-gray-700 border min-h-[44px]';
-          btn.setAttribute('aria-pressed', 'false');
-        }
+    function filtrarCategoria(cat) {
+      categoriaAtiva = cat;
+      document.querySelectorAll('.chip-categoria').forEach(btn => {
+        if (btn.innerText.toUpperCase() === cat) btn.classList.add('ativo');
+        else btn.classList.remove('ativo');
       });
       renderizarCatalogo();
     }
 
-    function adicionarProdutoAoCarrinho(id) {
-      const produto = MicroservicoCatalogo.obterProdutos().find(p => p.id === id);
-      if (produto) {
-        MicroservicoCarrinho.adicionar(produto);
+    function adicionarProduto(id) {
+      const p = MicroservicoCatalogo.obterProdutos().find(prod => prod.id === id);
+      if (p) {
+        MicroservicoCarrinho.adicionar(p);
         atualizarTotais();
       }
     }
 
-    // Renderização do Carrinho
     function renderizarCarrinho() {
       const container = document.getElementById('itensCarrinhoContainer');
       container.innerHTML = '';
 
       if (MicroservicoCarrinho.itens.length === 0) {
         container.innerHTML = `
-          <div class="text-center py-8 bg-white rounded-xl border border-dashed border-gray-300">
-            <p class="text-sm font-semibold text-gray-500">Seu carrinho ainda está vazio 🧺</p>
-            <button onclick="navegarPara('telaCatalogo')" class="mt-2 text-xs font-bold text-verde-primario min-h-[44px]">Escolher produtos na feira</button>
+          <div class="card" style="text-align: center; color: #777;">
+            Seu carrinho está vazio 🧺
           </div>
         `;
         return;
       }
 
       MicroservicoCarrinho.itens.forEach(item => {
-        const linha = document.createElement('div');
-        linha.className = "bg-white p-3.5 rounded-xl border border-gray-200 flex justify-between items-center";
-        linha.innerHTML = `
+        const div = document.createElement('div');
+        div.className = "item-produto";
+        div.innerHTML = `
           <div>
-            <h4 class="font-bold text-sm text-texto-principal">${item.produto.nome}</h4>
-            <p class="text-xs text-verde-primario font-semibold">R$ ${item.produto.preco.toFixed(2)} un.</p>
+            <h4 style="font-size:14px; font-weight:bold;">${item.produto.nome}</h4>
+            <p style="font-size:13px; color:var(--verde-primario); font-weight:bold;">R$ ${item.produto.preco.toFixed(2)}</p>
           </div>
-          <div class="flex items-center gap-2">
-            <button onclick="decrementarItem(${item.produto.id})" class="w-9 h-9 flex items-center justify-center bg-gray-100 rounded-lg text-sm font-bold hover:bg-gray-200 text-gray-800" aria-label="Diminuir quantidade de ${item.produto.nome}">-</button>
-            <span class="font-bold text-sm w-6 text-center">${item.quantidade}</span>
-            <button onclick="incrementarItem(${item.produto.id})" class="w-9 h-9 flex items-center justify-center bg-verde-claro rounded-lg text-sm font-bold text-verde-primario hover:bg-green-200" aria-label="Aumentar quantidade de ${item.produto.nome}">+</button>
+          <div class="qtd-controle">
+            <button onclick="decrementar(${item.produto.id})" class="btn-qtd">-</button>
+            <span style="font-weight:bold; min-width:20px; text-align:center;">${item.quantidade}</span>
+            <button onclick="adicionarProduto(${item.produto.id})" class="btn-qtd mais">+</button>
           </div>
         `;
-        container.appendChild(linha);
+        container.appendChild(div);
       });
     }
 
-    function decrementarItem(id) {
+    function decrementar(id) {
       MicroservicoCarrinho.decrementar(id);
       atualizarTotais();
     }
 
-    function incrementarItem(id) {
-      const produto = MicroservicoCatalogo.obterProdutos().find(p => p.id === id);
-      if (produto) {
-        MicroservicoCarrinho.adicionar(produto);
-        atualizarTotais();
-      }
-    }
-
     function atualizarTotais() {
       const subtotal = MicroservicoCarrinho.calcularSubtotal();
-      const qtdTotal = MicroservicoCarrinho.obterQuantidadeTotal();
-      
-      const freteRadio = document.querySelector('input[name="tipoEntrega"]:checked');
-      const valorFrete = (freteRadio && freteRadio.value === 'entrega') ? 5.00 : 0.00;
-      const totalFinal = subtotal > 0 ? (subtotal + valorFrete) : 0;
+      const qtd = MicroservicoCarrinho.obterQuantidadeTotal();
+      const frete = document.querySelector('input[name="tipoEntrega"]:checked')?.value === 'entrega' ? 5.00 : 0.00;
+      const total = subtotal > 0 ? (subtotal + frete) : 0;
 
-      // Labels da barra inferior
-      document.getElementById('labelContagemCarrinho').innerText = `Ver Carrinho (${qtdTotal} itens)`;
-      document.getElementById('labelTotalCarrinho').innerText = `R$ ${totalFinal.toFixed(2)}`;
+      document.getElementById('labelContagemCarrinho').innerText = `Ver Carrinho (${qtd} itens)`;
+      document.getElementById('labelTotalCarrinho').innerText = `R$ ${total.toFixed(2)}`;
 
-      // Labels da tela de checkout
       document.getElementById('valorSubtotal').innerText = `R$ ${subtotal.toFixed(2)}`;
-      document.getElementById('valorFrete').innerText = valorFrete > 0 ? "R$ 5,00" : "Grátis";
-      document.getElementById('valorTotalFinal').innerText = `R$ ${totalFinal.toFixed(2)}`;
+      document.getElementById('valorFrete').innerText = frete > 0 ? "R$ 5,00" : "Grátis";
+      document.getElementById('valorTotalFinal').innerText = `R$ ${total.toFixed(2)}`;
 
       renderizarCarrinho();
     }
 
     function finalizarCompra() {
       if (MicroservicoCarrinho.itens.length === 0) {
-        alert("O seu carrinho está vazio! Adicione produtos antes de finalizar.");
+        alert("Adicione itens ao carrinho primeiro!");
         return;
       }
-      alert("✅ Pedido realizado com sucesso!\nO feirante foi notificado e seus alimentos frescos já estão sendo separados.");
+      alert("✅ Pedido realizado com sucesso!\nO feirante foi notificado.");
       MicroservicoCarrinho.limpar();
       atualizarTotais();
       navegarPara('telaCatalogo');
     }
 
-    // Painel do Feirante
     function renderizarPainelFeirante() {
       const container = document.getElementById('listaProdutosFeirante');
       container.innerHTML = '';
-      const produtos = MicroservicoCatalogo.obterProdutos();
-
-      produtos.forEach(p => {
+      MicroservicoCatalogo.obterProdutos().forEach(p => {
         const item = document.createElement('div');
-        item.className = "bg-white p-3 rounded-xl border border-gray-200 flex justify-between items-center";
+        item.className = "item-produto";
         item.innerHTML = `
           <div>
-            <p class="font-bold text-sm text-texto-principal">${p.nome}</p>
-            <p class="text-xs text-gray-500">R$ ${p.preco.toFixed(2)} / ${p.unidade} • ${p.categoria}</p>
+            <p style="font-size:14px; font-weight:bold;">${p.nome}</p>
+            <p style="font-size:12px; color:#777;">R$ ${p.preco.toFixed(2)} / ${p.unidade}</p>
           </div>
-          <button onclick="excluirProdutoFeirante(${p.id})" class="text-xs bg-red-50 text-red-600 px-3 py-1.5 rounded-lg border border-red-200 font-bold hover:bg-red-100 min-h-[44px]" aria-label="Remover produto ${p.nome}">
-            Excluir
-          </button>
+          <button onclick="excluirProduto(${p.id})" class="btn-header" style="background:#FFEBEE; color:#C62828; border:1px solid #FFCDD2;">Excluir</button>
         `;
         container.appendChild(item);
       });
@@ -517,30 +666,28 @@
       const categoria = document.getElementById('cadCategoria').value;
 
       if (!nome || isNaN(preco) || preco <= 0) {
-        alert("Por favor, preencha o nome do produto e um preço válido!");
+        alert("Preencha o nome e um preço válido!");
         return;
       }
 
-      const novoProduto = {
+      MicroservicoCatalogo.adicionarProduto({
         id: Date.now(),
         nome,
         preco,
         unidade,
         categoria,
-        feirante: usuarioAtual ? usuarioAtual.nome : "Produtor Parceiro"
-      };
+        feirante: usuarioAtual ? usuarioAtual.nome : "Feirante Parceiro"
+      });
 
-      MicroservicoCatalogo.adicionarProduto(novoProduto);
       document.getElementById('cadNome').value = '';
       document.getElementById('cadPreco').value = '';
       document.getElementById('cadUnidade').value = '';
-
       renderizarPainelFeirante();
-      alert(`Produto "${nome}" cadastrado com sucesso no catálogo!`);
+      alert(`Produto "${nome}" cadastrado com sucesso!`);
     }
 
-    function excluirProdutoFeirante(id) {
-      if (confirm("Deseja realmente remover este produto do catálogo?")) {
+    function excluirProduto(id) {
+      if (confirm("Remover este produto do catálogo?")) {
         MicroservicoCatalogo.removerProduto(id);
         renderizarPainelFeirante();
       }
