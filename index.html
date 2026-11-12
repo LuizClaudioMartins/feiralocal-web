@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FeiraLocal 🌱 — Marketplace Agrícola Acessível</title>
+  
+  <!-- Tailwind CSS para Estilização Moderna e Responsiva -->
+  <script src="[suspicious link removed]"></script>
+  
+  <script>
+    // Configuração do Design System oficial (Cores e Tokens WCAG)
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            verde: {
+              primario: '#2E7D32',
+              escuro: '#1B5E20',
+              claro: '#E8F5E9'
+            },
+            laranja: {
+              acao: '#E65100',
+              fundo: '#FFF3E0'
+            },
+            superficie: '#F9FBE7',
+            texto: {
+              principal: '#212121',
+              secundario: '#555555'
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* WCAG: Indicador de foco evidente para navegação por teclado (Tecla Tab) */
+    button:focus-visible, input:focus-visible, select:focus-visible {
+      outline: 3px solid #E65100;
+      outline-offset: 2px;
+    }
+  </style>
+</head>
+<body class="bg-gray-100 text-texto-principal antialiased flex justify-center min-h-screen">
+
+  <!-- Container Mobile-First (Simula o App no navegador ou preenche a tela do celular) -->
+  <div class="w-full max-w-md bg-superficie shadow-2xl flex flex-col min-h-screen relative">
+
+    <!-- ========================================== -->
+    <!-- 1. HEADER MODULAR & ACESSÍVEL             -->
+    <!-- ========================================== -->
+    <header class="bg-verde-primario text-white p-4 shadow-md flex justify-between items-center" role="banner">
+      <div>
+        <h1 class="text-xl font-bold flex items-center gap-1">FeiraLocal 🌱</h1>
+        <p id="labelUsuario" class="text-xs text-verde-claro font-medium">Conectando você à agricultura familiar</p>
+      </div>
+      <div id="acoesHeader" class="hidden flex items-center gap-2">
+        <button id="btnTrocaPerfil" onclick="alternarVisaoFeirante()" class="text-xs bg-white text-verde-primario px-2.5 py-1.5 rounded-lg font-bold hover:bg-gray-100 transition min-h-[44px]" aria-label="Acessar painel do feirante">
+          Feirante
+        </button>
+        <button onclick="realizarLogout()" class="text-xs bg-red-600 text-white px-2.5 py-1.5 rounded-lg font-bold hover:bg-red-700 transition min-h-[44px]" aria-label="Sair da conta atual">
+          Sair
+        </button>
+      </div>
+    </header>
+
+    <!-- ========================================== -->
+    <!-- 2. ÁREA PRINCIPAL (TELAS NAVEGÁVEIS)       -->
+    <!-- ========================================== -->
+    <main class="flex-1 p-4 overflow-y-auto" id="conteudoPrincipal" role="main">
+
+      <!-- TELA 1: LOGIN & CADASTRO -->
+      <section id="telaLogin" class="flex flex-col justify-center h-full py-6">
+        <div class="text-center mb-6">
+          <h2 class="text-2xl font-bold text-verde-primario">Bem-vindo(a) à Feira!</h2>
+          <p class="text-sm text-texto-secundario mt-1">Alimentos frescos direto do produtor rural</p>
+        </div>
+
+        <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
+          <label for="inputEmail" class="block text-sm font-semibold mb-1 text-texto-principal">E-mail</label>
+          <input type="email" id="inputEmail" value="maria@email.com" class="w-full p-3 border rounded-xl mb-4 text-base focus:ring-2 focus:ring-verde-primario min-h-[48px]" placeholder="seu@email.com" aria-required="true">
+
+          <label for="inputSenha" class="block text-sm font-semibold mb-1 text-texto-principal">Senha</label>
+          <div class="relative mb-6">
+            <input type="password" id="inputSenha" value="123456" class="w-full p-3 border rounded-xl text-base focus:ring-2 focus:ring-verde-primario min-h-[48px]" placeholder="Digite sua senha" aria-required="true">
+            <button type="button" onclick="alternarVisibilidadeSenha()" class="absolute right-3 top-3 text-xs font-bold text-verde-primario min-h-[44px] px-1" aria-label="Alternar exibição da senha">
+              <span id="textoVisibilidadeSenha">Ver</span>
+            </button>
+          </div>
+
+          <button onclick="entrarComo('Dona Maria (Compradora)', 'comprador')" class="w-full bg-verde-primario text-white py-3.5 rounded-xl font-bold text-base hover:bg-verde-escuro transition min-h-[48px] shadow-sm mb-3" aria-label="Entrar na conta">
+            Entrar no FeiraLocal
+          </button>
+
+          <div class="relative flex py-3 items-center">
+            <div class="flex-grow border-t border-gray-200"></div>
+            <span class="flex-shrink mx-3 text-xs text-gray-400 font-semibold uppercase">Atalhos de Demonstração UX</span>
+            <div class="flex-grow border-t border-gray-200"></div>
+          </div>
+
+          <div class="space-y-2 mt-1">
+            <button onclick="entrarComo('Dona Maria (Compradora)', 'comprador')" class="w-full border-2 border-verde-primario text-verde-primario py-2.5 rounded-xl text-xs font-bold hover:bg-verde-claro transition min-h-[48px]">
+              Persona 1: Dona Maria (Compradora)
+            </button>
+            <button onclick="entrarComo('Seu José (Feirante)', 'vendedor')" class="w-full border-2 border-laranja-acao text-laranja-acao py-2.5 rounded-xl text-xs font-bold hover:bg-laranja-fundo transition min-h-[48px]">
+              Persona 2: Seu José (Feirante)
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- TELA 2: CATÁLOGO DO COMPRADOR -->
+      <section id="telaCatalogo" class="hidden pb-20">
+        <!-- Barra de Filtros de Categorias -->
+        <nav class="flex gap-2 overflow-x-auto pb-3 mb-4 scrollbar-none" aria-label="Categorias de produtos">
+          <button onclick="filtrarCategoria('TODOS')" class="filtro-btn px-4 py-2 rounded-full text-xs font-bold bg-verde-primario text-white min-h-[44px]" aria-pressed="true">Todos</button>
+          <button onclick="filtrarCategoria('VERDURAS')" class="filtro-btn px-4 py-2 rounded-full text-xs font-bold bg-white text-gray-700 border min-h-[44px]" aria-pressed="false">Verduras</button>
+          <button onclick="filtrarCategoria('LEGUMES')" class="filtro-btn px-4 py-2 rounded-full text-xs font-bold bg-white text-gray-700 border min-h-[44px]" aria-pressed="false">Legumes</button>
+          <button onclick="filtrarCategoria('FRUTAS')" class="filtro-btn px-4 py-2 rounded-full text-xs font-bold bg-white text-gray-700 border min-h-[44px]" aria-pressed="false">Frutas</button>
+          <button onclick="filtrarCategoria('TUBERCULOS')" class="filtro-btn px-4 py-2 rounded-full text-xs font-bold bg-white text-gray-700 border min-h-[44px]" aria-pressed="false">Tubérculos</button>
+        </nav>
+
+        <!-- Lista de Cards de Produtos (Modular) -->
+        <div id="listaProdutosContainer" class="space-y-3" role="region" aria-live="polite">
+          <!-- Renderizado via JavaScript -->
+        </div>
+      </section>
+
+      <!-- TELA 3: CARRINHO & CHECKOUT -->
+      <section id="telaCarrinho" class="hidden pb-20">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-lg font-bold text-texto-principal">Meu Carrinho da Feira</h2>
+          <button onclick="navegarPara('telaCatalogo')" class="text-xs text-verde-primario font-bold min-h-[44px] px-2" aria-label="Voltar para a lista de produtos">
+            ← Continuar Comprando
+          </button>
+        </div>
+
+        <div id="itensCarrinhoContainer" class="space-y-3 mb-6" role="region" aria-live="polite">
+          <!-- Renderizado via JavaScript -->
+        </div>
+
+        <!-- Opção de Entrega / Retirada -->
+        <fieldset class="bg-white p-4 rounded-xl border border-gray-200 mb-6">
+          <legend class="text-sm font-bold text-texto-principal mb-2">Forma de Recebimento</legend>
+          <label class="flex items-center gap-3 p-2 rounded-lg cursor-pointer hover:bg-gray-50 min-h-[48px]">
+            <input type="radio" name="tipoEntrega" value="retirada" checked onchange="atualizarTotais()" class="w-5 h-5 text-verde-primario">
+            <span class="text-sm font-medium">Retirar direto na banca (Grátis)</span>
+          </label>
+          <label class="flex items-center gap-3 p-2 rounded-lg cursor-pointer hover:bg-gray-50 min-h-[48px]">
+            <input type="radio" name="tipoEntrega" value="entrega" onchange="atualizarTotais()" class="w-5 h-5 text-verde-primario">
+            <span class="text-sm font-medium">Entrega ecológica em casa (+ R$ 5,00)</span>
+          </label>
+        </fieldset>
+
+        <!-- Resumo Financeiro Acessível -->
+        <div class="bg-white p-4 rounded-xl border border-gray-200 space-y-2 mb-6">
+          <div class="flex justify-between text-sm">
+            <span class="text-texto-secundario">Subtotal produtos:</span>
+            <span id="valorSubtotal" class="font-bold">R$ 0,00</span>
+          </div>
+          <div class="flex justify-between text-sm">
+            <span class="text-texto-secundario">Frete / Taxa:</span>
+            <span id="valorFrete" class="font-bold">Grátis</span>
+          </div>
+          <div class="border-t pt-2 flex justify-between text-base font-bold text-verde-primario">
+            <span>Total a Pagar:</span>
+            <span id="valorTotalFinal" class="text-lg">R$ 0,00</span>
+          </div>
+        </div>
+
+        <button onclick="finalizarCompra()" class="w-full bg-laranja-acao text-white py-3.5 rounded-xl font-bold text-base hover:opacity-95 transition min-h-[52px] shadow-md" aria-label="Finalizar e confirmar pedido da feira">
+          Confirmar e Finalizar Pedido
+        </button>
+      </section>
+
+      <!-- TELA 4: PAINEL DE GESTÃO DO FEIRANTE -->
+      <section id="telaFeirante" class="hidden pb-20">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-lg font-bold text-texto-principal">Gestão de Colheitas</h2>
+          <button onclick="navegarPara('telaCatalogo')" class="text-xs text-verde-primario font-bold min-h-[44px] px-2">
+            Ver Catálogo →
+          </button>
+        </div>
+
+        <!-- Formulário Rápido de Cadastro de Produto -->
+        <div class="bg-white p-4 rounded-xl border border-gray-200 mb-6 shadow-sm">
+          <h3 class="text-sm font-bold text-verde-primario mb-3">Cadastrar Nova Colheita</h3>
+          
+          <label for="cadNome" class="block text-xs font-semibold mb-1">Nome do Alimento</label>
+          <input type="text" id="cadNome" placeholder="Ex: Cenoura Orgânica" class="w-full p-2.5 border rounded-lg mb-3 text-sm min-h-[48px]">
+
+          <div class="grid grid-cols-2 gap-2 mb-3">
+            <div>
+              <label for="cadPreco" class="block text-xs font-semibold mb-1">Preço R$</label>
+              <input type="number" id="cadPreco" step="0.50" placeholder="4.50" class="w-full p-2.5 border rounded-lg text-sm min-h-[48px]">
+            </div>
+            <div>
+              <label for="cadUnidade" class="block text-xs font-semibold mb-1">Unidade</label>
+              <input type="text" id="cadUnidade" placeholder="kg, maço" class="w-full p-2.5 border rounded-lg text-sm min-h-[48px]">
+            </div>
+          </div>
+
+          <div class="mb-4">
+            <label for="cadCategoria" class="block text-xs font-semibold mb-1">Categoria</label>
+            <select id="cadCategoria" class="w-full p-2.5 border rounded-lg text-sm min-h-[48px] bg-white">
+              <option value="VERDURAS">Verduras</option>
+              <option value="LEGUMES">Legumes</option>
+              <option value="FRUTAS">Frutas</option>
+              <option value="TUBERCULOS">Tubérculos</option>
+            </select>
+          </div>
+
+          <button onclick="cadastrarNovoProduto()" class="w-full bg-verde-primario text-white py-3 rounded-lg font-bold text-sm hover:bg-verde-escuro transition min-h-[48px]">
+            + Adicionar ao Catálogo da Feira
+          </button>
+        </div>
+
+        <!-- Lista de Produtos para Exclusão/Controle -->
+        <h3 class="text-sm font-bold text-texto-principal mb-2">Produtos Ativos no Sistema</h3>
+        <div id="listaProdutosFeirante" class="space-y-2" role="region" aria-live="polite">
+          <!-- Renderizado via JavaScript -->
+        </div>
+      </section>
+
+    </main>
+
+    <!-- ========================================== -->
+    <!-- 3. FOOTER FIXO (BOTÃO DE AÇÃO / CARRINHO)  -->
+    <!-- ========================================== -->
+    <footer id="barraInferiorCarrinho" class="hidden p-3 bg-white border-t border-gray-200 shadow-lg sticky bottom-0">
+      <button onclick="navegarPara('telaCarrinho')" class="w-full bg-laranja-acao text-white py-3 px-4 rounded-xl font-bold flex justify-between items-center shadow-md min-h-[52px]" aria-label="Abrir carrinho de compras">
+        <span id="labelContagemCarrinho">Ver Carrinho (0 itens)</span>
+        <span id="labelTotalCarrinho">R$ 0,00</span>
+      </button>
+    </footer>
+
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- 4. ARQUITETURA DE MICROSSERVIÇOS & LÓGICA MODULAR FRONT-END   -->
+  <!-- ============================================================ -->
+  <script>
+    // --- MICROSSERVIÇO 1: Catálogo de Produtos (Independente) ---
+    const MicroservicoCatalogo = {
+      produtos: [
+        { id: 1, nome: "Alface Americana Fresca", preco: 3.50, unidade: "maço", categoria: "VERDURAS", feirante: "Seu José da Horta" },
+        { id: 2, nome: "Tomate Cereja Orgânico", preco: 6.90, unidade: "kg", categoria: "LEGUMES", feirante: "Dona Neide" },
+        { id: 3, nome: "Cenoura Selecionada", preco: 4.20, unidade: "kg", categoria: "LEGUMES", feirante: "Seu José da Horta" },
+        { id: 4, nome: "Banana Prata Climatizada", preco: 5.50, unidade: "palma", categoria: "FRUTAS", feirante: "Feira Boa Vista" },
+        { id: 5, nome: "Macaxeira Descascada", preco: 4.80, unidade: "kg", categoria: "TUBERCULOS", feirante: "Sítio Primavera" }
+      ],
+      obterProdutos() {
+        return this.produtos;
+      },
+      adicionarProduto(produto) {
+        this.produtos.push(produto);
+      },
+      removerProduto(id) {
+        this.produtos = this.produtos.filter(p => p.id !== id);
+      }
+    };
+
+    // --- MICROSSERVIÇO 2: Gestão do Carrinho e Checkout (Isolado) ---
+    const MicroservicoCarrinho = {
+      itens: [],
+      adicionar(produto) {
+        const itemExistente = this.itens.find(i => i.produto.id === produto.id);
+        if (itemExistente) {
+          itemExistente.quantidade++;
+        } else {
+          this.itens.push({ produto, quantidade: 1 });
+        }
+      },
+      decrementar(produtoId) {
+        const itemExistente = this.itens.find(i => i.produto.id === produtoId);
+        if (itemExistente) {
+          itemExistente.quantidade--;
+          if (itemExistente.quantidade <= 0) {
+            this.itens = this.itens.filter(i => i.produto.id !== produtoId);
+          }
+        }
+      },
+      limpar() {
+        this.itens = [];
+      },
+      calcularSubtotal() {
+        return this.itens.reduce((acc, i) => acc + (i.produto.preco * i.quantidade), 0);
+      },
+      obterQuantidadeTotal() {
+        return this.itens.reduce((acc, i) => acc + i.quantidade, 0);
+      }
+    };
+
+    // --- ESTADO GLOBAL DA APLICAÇÃO ---
+    let usuarioAtual = null;
+    let categoriaAtiva = "TODOS";
+
+    // Navegação entre Telas
+    function navegarPara(idTela) {
+      const telas = ['telaLogin', 'telaCatalogo', 'telaCarrinho', 'telaFeirante'];
+      telas.forEach(t => {
+        document.getElementById(t).classList.add('hidden');
+      });
+
+      document.getElementById(idTela).classList.remove('hidden');
+
+      // Exibição do footer do carrinho apenas no catálogo
+      const footerCarrinho = document.getElementById('barraInferiorCarrinho');
+      if (idTela === 'telaCatalogo' && usuarioAtual?.tipo === 'comprador') {
+        footerCarrinho.classList.remove('hidden');
+      } else {
+        footerCarrinho.classList.add('hidden');
+      }
+
+      window.scrollTo(0, 0);
+    }
+
+    // Autenticação e Seleção de Personas
+    function entrarComo(nome, tipo) {
+      usuarioAtual = { nome, tipo };
+      document.getElementById('labelUsuario').innerText = `Olá, ${nome}`;
+      document.getElementById('acoesHeader').classList.remove('hidden');
+
+      if (tipo === 'vendedor') {
+        renderizarPainelFeirante();
+        navegarPara('telaFeirante');
+      } else {
+        renderizarCatalogo();
+        atualizarTotais();
+        navegarPara('telaCatalogo');
+      }
+    }
+
+    function realizarLogout() {
+      usuarioAtual = null;
+      document.getElementById('labelUsuario').innerText = 'Conectando você à agricultura familiar';
+      document.getElementById('acoesHeader').classList.add('hidden');
+      document.getElementById('barraInferiorCarrinho').classList.add('hidden');
+      navegarPara('telaLogin');
+    }
+
+    function alternarVisaoFeirante() {
+      if (document.getElementById('telaFeirante').classList.contains('hidden')) {
+        renderizarPainelFeirante();
+        navegarPara('telaFeirante');
+      } else {
+        renderizarCatalogo();
+        navegarPara('telaCatalogo');
+      }
+    }
+
+    function alternarVisibilidadeSenha() {
+      const input = document.getElementById('inputSenha');
+      const label = document.getElementById('textoVisibilidadeSenha');
+      if (input.type === 'password') {
+        input.type = 'text';
+        label.innerText = 'Ocultar';
+      } else {
+        input.type = 'password';
+        label.innerText = 'Ver';
+      }
+    }
+
+    // Renderização do Catálogo (Modular)
+    function renderizarCatalogo() {
+      const container = document.getElementById('listaProdutosContainer');
+      container.innerHTML = '';
+
+      const produtos = MicroservicoCatalogo.obterProdutos();
+      const filtrados = (categoriaAtiva === 'TODOS') 
+        ? produtos 
+        : produtos.filter(p => p.categoria === categoriaAtiva);
+
+      filtrados.forEach(p => {
+        const card = document.createElement('article');
+        card.className = "bg-white p-4 rounded-xl border border-gray-200 shadow-sm flex justify-between items-center";
+        card.innerHTML = `
+          <div>
+            <h3 class="font-bold text-base text-texto-principal">${p.nome}</h3>
+            <p class="text-xs text-texto-secundario">Produtor: ${p.feirante}</p>
+            <p class="text-base font-bold text-verde-primario mt-1">R$ ${p.preco.toFixed(2)} <span class="text-xs font-normal text-gray-500">/ ${p.unidade}</span></p>
+          </div>
+          <button onclick="adicionarProdutoAoCarrinho(${p.id})" class="bg-verde-primario text-white px-4 py-2.5 rounded-xl font-bold text-xs hover:bg-verde-escuro transition min-h-[48px]" aria-label="Adicionar ${p.nome} ao carrinho">
+            + Adicionar
+          </button>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function filtrarCategoria(categoria) {
+      categoriaAtiva = categoria;
+      document.querySelectorAll('.filtro-btn').forEach(btn => {
+        if (btn.innerText.toUpperCase() === categoria) {
+          btn.className = 'filtro-btn px-4 py-2 rounded-full text-xs font-bold bg-verde-primario text-white min-h-[44px]';
+          btn.setAttribute('aria-pressed', 'true');
+        } else {
+          btn.className = 'filtro-btn px-4 py-2 rounded-full text-xs font-bold bg-white text-gray-700 border min-h-[44px]';
+          btn.setAttribute('aria-pressed', 'false');
+        }
+      });
+      renderizarCatalogo();
+    }
+
+    function adicionarProdutoAoCarrinho(id) {
+      const produto = MicroservicoCatalogo.obterProdutos().find(p => p.id === id);
+      if (produto) {
+        MicroservicoCarrinho.adicionar(produto);
+        atualizarTotais();
+      }
+    }
+
+    // Renderização do Carrinho
+    function renderizarCarrinho() {
+      const container = document.getElementById('itensCarrinhoContainer');
+      container.innerHTML = '';
+
+      if (MicroservicoCarrinho.itens.length === 0) {
+        container.innerHTML = `
+          <div class="text-center py-8 bg-white rounded-xl border border-dashed border-gray-300">
+            <p class="text-sm font-semibold text-gray-500">Seu carrinho ainda está vazio 🧺</p>
+            <button onclick="navegarPara('telaCatalogo')" class="mt-2 text-xs font-bold text-verde-primario min-h-[44px]">Escolher produtos na feira</button>
+          </div>
+        `;
+        return;
+      }
+
+      MicroservicoCarrinho.itens.forEach(item => {
+        const linha = document.createElement('div');
+        linha.className = "bg-white p-3.5 rounded-xl border border-gray-200 flex justify-between items-center";
+        linha.innerHTML = `
+          <div>
+            <h4 class="font-bold text-sm text-texto-principal">${item.produto.nome}</h4>
+            <p class="text-xs text-verde-primario font-semibold">R$ ${item.produto.preco.toFixed(2)} un.</p>
+          </div>
+          <div class="flex items-center gap-2">
+            <button onclick="decrementarItem(${item.produto.id})" class="w-9 h-9 flex items-center justify-center bg-gray-100 rounded-lg text-sm font-bold hover:bg-gray-200 text-gray-800" aria-label="Diminuir quantidade de ${item.produto.nome}">-</button>
+            <span class="font-bold text-sm w-6 text-center">${item.quantidade}</span>
+            <button onclick="incrementarItem(${item.produto.id})" class="w-9 h-9 flex items-center justify-center bg-verde-claro rounded-lg text-sm font-bold text-verde-primario hover:bg-green-200" aria-label="Aumentar quantidade de ${item.produto.nome}">+</button>
+          </div>
+        `;
+        container.appendChild(linha);
+      });
+    }
+
+    function decrementarItem(id) {
+      MicroservicoCarrinho.decrementar(id);
+      atualizarTotais();
+    }
+
+    function incrementarItem(id) {
+      const produto = MicroservicoCatalogo.obterProdutos().find(p => p.id === id);
+      if (produto) {
+        MicroservicoCarrinho.adicionar(produto);
+        atualizarTotais();
+      }
+    }
+
+    function atualizarTotais() {
+      const subtotal = MicroservicoCarrinho.calcularSubtotal();
+      const qtdTotal = MicroservicoCarrinho.obterQuantidadeTotal();
+      
+      const freteRadio = document.querySelector('input[name="tipoEntrega"]:checked');
+      const valorFrete = (freteRadio && freteRadio.value === 'entrega') ? 5.00 : 0.00;
+      const totalFinal = subtotal > 0 ? (subtotal + valorFrete) : 0;
+
+      // Labels da barra inferior
+      document.getElementById('labelContagemCarrinho').innerText = `Ver Carrinho (${qtdTotal} itens)`;
+      document.getElementById('labelTotalCarrinho').innerText = `R$ ${totalFinal.toFixed(2)}`;
+
+      // Labels da tela de checkout
+      document.getElementById('valorSubtotal').innerText = `R$ ${subtotal.toFixed(2)}`;
+      document.getElementById('valorFrete').innerText = valorFrete > 0 ? "R$ 5,00" : "Grátis";
+      document.getElementById('valorTotalFinal').innerText = `R$ ${totalFinal.toFixed(2)}`;
+
+      renderizarCarrinho();
+    }
+
+    function finalizarCompra() {
+      if (MicroservicoCarrinho.itens.length === 0) {
+        alert("O seu carrinho está vazio! Adicione produtos antes de finalizar.");
+        return;
+      }
+      alert("✅ Pedido realizado com sucesso!\nO feirante foi notificado e seus alimentos frescos já estão sendo separados.");
+      MicroservicoCarrinho.limpar();
+      atualizarTotais();
+      navegarPara('telaCatalogo');
+    }
+
+    // Painel do Feirante
+    function renderizarPainelFeirante() {
+      const container = document.getElementById('listaProdutosFeirante');
+      container.innerHTML = '';
+      const produtos = MicroservicoCatalogo.obterProdutos();
+
+      produtos.forEach(p => {
+        const item = document.createElement('div');
+        item.className = "bg-white p-3 rounded-xl border border-gray-200 flex justify-between items-center";
+        item.innerHTML = `
+          <div>
+            <p class="font-bold text-sm text-texto-principal">${p.nome}</p>
+            <p class="text-xs text-gray-500">R$ ${p.preco.toFixed(2)} / ${p.unidade} • ${p.categoria}</p>
+          </div>
+          <button onclick="excluirProdutoFeirante(${p.id})" class="text-xs bg-red-50 text-red-600 px-3 py-1.5 rounded-lg border border-red-200 font-bold hover:bg-red-100 min-h-[44px]" aria-label="Remover produto ${p.nome}">
+            Excluir
+          </button>
+        `;
+        container.appendChild(item);
+      });
+    }
+
+    function cadastrarNovoProduto() {
+      const nome = document.getElementById('cadNome').value.trim();
+      const preco = parseFloat(document.getElementById('cadPreco').value);
+      const unidade = document.getElementById('cadUnidade').value.trim() || 'unidade';
+      const categoria = document.getElementById('cadCategoria').value;
+
+      if (!nome || isNaN(preco) || preco <= 0) {
+        alert("Por favor, preencha o nome do produto e um preço válido!");
+        return;
+      }
+
+      const novoProduto = {
+        id: Date.now(),
+        nome,
+        preco,
+        unidade,
+        categoria,
+        feirante: usuarioAtual ? usuarioAtual.nome : "Produtor Parceiro"
+      };
+
+      MicroservicoCatalogo.adicionarProduto(novoProduto);
+      document.getElementById('cadNome').value = '';
+      document.getElementById('cadPreco').value = '';
+      document.getElementById('cadUnidade').value = '';
+
+      renderizarPainelFeirante();
+      alert(`Produto "${nome}" cadastrado com sucesso no catálogo!`);
+    }
+
+    function excluirProdutoFeirante(id) {
+      if (confirm("Deseja realmente remover este produto do catálogo?")) {
+        MicroservicoCatalogo.removerProduto(id);
+        renderizarPainelFeirante();
+      }
+    }
+  </script>
+</body>
+</html>
